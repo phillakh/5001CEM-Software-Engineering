@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>  
+<head>
+        <title>Upload an Item</title>
+        <link rel="stylesheet" type="text/css" href="/style.css">
+
+</head>
+<body>
+
+    <header>
+        <h1>Gallery</h1>
+    </header>
+        <nav >   
+            <ul>
+               <il><a href='/index'>Home</a></il>
+               <il><a href='/myaccount'>MyAccount</a></il>
+               <il><a href='/useritems'>User Items</a></il> 
+            </ul>
+        </nav>
+    
+
+    <h2>Upload an Item:</h2>
+
+    <form>
+    Title:<br>
+    <input type="text" name="title" >
+    <br>
+    Price:<br>
+    <input type="text" name="price">
+    <br>
+    Short description: <br>
+    <input type="text" name="shortDesc" >
+    <br>
+    Detailed description: <br>
+    <textarea name="detailedDesc" cols="50" rows="8"></textarea>
+    <br>
+    Item image:<br>
+    <input type="file"
+        id="itemImg" name="itemImg"
+        accept="image/png, image/jpeg">
+    <br><br>  
+    <input type="submit" value="Submit">
+    </form> 
+</body>
+</html> 
