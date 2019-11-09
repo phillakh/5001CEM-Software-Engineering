@@ -2,7 +2,7 @@
 'use strict'
 
 const bcrypt = require('bcrypt-promise')
-// const fs = require('fs-extra')
+const fs = require('fs-extra')
 const mime = require('mime-types')
 const sqlite = require('sqlite-async')
 const saltRounds = 10
@@ -13,8 +13,16 @@ module.exports = class User {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			// we need this table to store the user accounts
-			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT);'
+			const sqlUsersTable = '(id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT);'
+			const sql = `CREATE TABLE IF NOT EXISTS users ${ sqlUsersTable}`
 			await this.db.run(sql)
+			// we need this table to store the user items
+			const sqlItemsTable1 = '(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, '
+			const sqlItemsTable2 = 'shortDesc TEXT, longDesc TEXT, price INTEGER, owner TEXT, '
+			const sqlItemsTable3 = 'phone INTEGER, email TEXT);'
+			const sqlItemsTable = 'CREATE TABLE IF NOT EXISTS items '
+			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}${sqlItemsTable3}`
+			await this.db.run(sqlItems)
 			return this
 		})()
 	}
@@ -26,6 +34,7 @@ module.exports = class User {
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${user}";`
 			const data = await this.db.get(sql)
 			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
+			this.username = user
 			pass = await bcrypt.hash(pass, saltRounds)
 			sql = `INSERT INTO users(user, pass) VALUES("${user}", "${pass}")`
 			await this.db.run(sql)
@@ -39,7 +48,7 @@ module.exports = class User {
 		const extension = mime.extension(mimeType)
 		console.log(`path: ${path}`)
 		console.log(`extension: ${extension}`)
-		//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
+		await fs.copy(path, `public/avatars/${this.username}.jpeg`)
 	}
 
 	async login(username, password) {
@@ -52,6 +61,21 @@ module.exports = class User {
 			const valid = await bcrypt.compare(password, record.pass)
 			if(valid === false) throw new Error(`invalid password for account "${username}"`)
 			return true
+		} catch(err) {
+			throw err
+		}
+	}
+
+	async uploadItem(path, itemInfo) {
+		try{
+
+			if(itemInfo.title.length === 0) throw new Error('missing title')
+			if(itemInfo.price.length === 0) throw new Error('missing price')
+			await fs.copy(path, `public/itemImages/${itemInfo.title}.jpeg`)
+			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price) '
+			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
+			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}")`
+			await this.db.run(sql + sql2 + sql3)
 		} catch(err) {
 			throw err
 		}
