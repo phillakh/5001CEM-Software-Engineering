@@ -71,7 +71,7 @@ router.post('/register', koaBody, async ctx => {
 		console.log(body)
 		// call the functions in the module
 		const user = await new User(dbName)
-		await user.register(body.user, body.pass)
+		await user.register(body.user, body.pass, body.email, body.phone)
 		const avatar = ctx.request.files.avatar
 		await user.uploadPicture(avatar.path, `image/${avatar.type}`)
 		// redirect to the home page
@@ -81,6 +81,13 @@ router.post('/register', koaBody, async ctx => {
 	}
 })
 
+/**
+ * The user login page.
+ *
+ * @name Login Page
+ * @route {GET} /login
+ */
+
 router.get('/login', async ctx => {
 	const data = {}
 	if(ctx.query.msg) data.msg = ctx.query.msg
@@ -88,12 +95,20 @@ router.get('/login', async ctx => {
 	await ctx.render('login', data)
 })
 
+/**
+ * The script to process user logins.
+ *
+ * @name Login Script
+ * @route {POST} /login
+ */
+
 router.post('/login', async ctx => {
 	try {
 		const body = ctx.request.body
 		const user = await new User(dbName)
 		await user.login(body.user, body.pass)
 		ctx.session.authorised = true
+		ctx.session.username = body.user
 
 		return ctx.redirect('/')
 	} catch(err) {
@@ -103,6 +118,7 @@ router.post('/login', async ctx => {
 
 router.get('/logout', async ctx => {
 	ctx.session.authorised = null
+	delete ctx.session.username
 	ctx.redirect('/?msg=you are now logged out')
 })
 
@@ -126,9 +142,10 @@ router.post('/upload', koaBody, async ctx => {
 	try {
 		// extract the data from the request
 		const body = ctx.request.body
+		body.owner = ctx.session.username
 		// call the functions in the module
 		const user = await new User(dbName)
-
+		
 		await user.uploadItem(ctx.request.files.itemImage.path, body)
 
 		// redirect to the home page

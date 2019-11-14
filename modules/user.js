@@ -13,30 +13,31 @@ module.exports = class User {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			// we need this table to store the user accounts
-			const sqlUsersTable = '(id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT);'
+			const sqlUsersTable = '(id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT, email TEXT, phone INTEGER);'
 			const sql = `CREATE TABLE IF NOT EXISTS users ${ sqlUsersTable}`
 			await this.db.run(sql)
 			// we need this table to store the user items
 			const sqlItemsTable1 = '(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, '
-			const sqlItemsTable2 = 'shortDesc TEXT, longDesc TEXT, price INTEGER, owner TEXT, '
-			const sqlItemsTable3 = 'phone INTEGER, email TEXT);'
+			const sqlItemsTable2 = 'shortDesc TEXT, longDesc TEXT, price INTEGER, owner TEXT);'
 			const sqlItemsTable = 'CREATE TABLE IF NOT EXISTS items '
-			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}${sqlItemsTable3}`
+			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}`
 			await this.db.run(sqlItems)
 			return this
 		})()
 	}
 
-	async register(user, pass) {
+	async register(user, pass, email, phone) {
 		try {
 			if(user.length === 0) throw new Error('missing username')
 			if(pass.length === 0) throw new Error('missing password')
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${user}";`
 			const data = await this.db.get(sql)
 			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
-			this.username = user
 			pass = await bcrypt.hash(pass, saltRounds)
-			sql = `INSERT INTO users(user, pass) VALUES("${user}", "${pass}")`
+			const isnum = /^\d+$/.test(phone);
+			if(!isnum) throw new Error(`${phone} is not a valid phone number`)
+			sql = `INSERT INTO users(user, pass, email, phone) VALUES("${user}", "${pass}", "${email}", 
+			"${phone}")`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
@@ -72,9 +73,9 @@ module.exports = class User {
 			if(itemInfo.title.length === 0) throw new Error('missing title')
 			if(itemInfo.price.length === 0) throw new Error('missing price')
 			await fs.copy(path, `public/itemImages/${itemInfo.title}.jpeg`)
-			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price) '
+			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price, owner) '
 			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
-			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}")`
+			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`
 			await this.db.run(sql + sql2 + sql3)
 		} catch(err) {
 			throw err
