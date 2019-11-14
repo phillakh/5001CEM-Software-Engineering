@@ -1,7 +1,7 @@
 {
-  "name": "10_auth",
+  "name": "gallery",
   "version": "1.0.0",
-  "description": "",
+  "description": "Software engineering`s module group project for the task `Gallery`",
   "main": "index.js",
   "engines": {
     "node": "12.x"
@@ -19,7 +19,7 @@
       "<rootDir>/jest-test.config.js"
     ]
   },
-  "author": "",
+  "author": "Goncalo Marcelino, Jordan Roberts, Kiranjit Shergill, Philip Akhnoukh, Syam Marcus, Lewis Hodgson",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
