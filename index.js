@@ -16,6 +16,7 @@ const session = require('koa-session')
 
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
+const Display = require('./modules/display')
 
 
 const app = new Koa()
@@ -150,6 +151,24 @@ router.post('/upload', koaBody, async ctx => {
 
 		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+/**
+ * The homepage with gallery items grid.
+ *
+ * @name homepage Page
+ * @route {GET} /homepage
+ */
+
+router.get('/homepage', async ctx => {
+	try {
+		const display = await new Display()
+		const data = await display.list('website.db')
+		console.log(data)
+		await ctx.render('homepage', {item: data} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

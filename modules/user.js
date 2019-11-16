@@ -72,7 +72,9 @@ module.exports = class User {
 
 			if(itemInfo.title.length === 0) throw new Error('missing title')
 			if(itemInfo.price.length === 0) throw new Error('missing price')
-			await fs.copy(path, `public/itemImages/${itemInfo.title}.jpeg`)
+			let sqlID = `SELECT count(id) AS count FROM items;`
+			const records = await this.db.get(sqlID)
+			await fs.copy(path, `public/itemImages/${records.count+1}.jpeg`)
 			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price, owner) '
 			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
 			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`

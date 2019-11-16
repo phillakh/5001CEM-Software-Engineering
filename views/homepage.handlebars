@@ -17,18 +17,18 @@
         </nav> 
                 
         
-        {{#each}}
+        
         <section class = "row">
-                {{#each}}
+                {{#each item}}
                 <section class = "column">
                     <figure>
                         <a href="art"></a>
-                        <img src="images/cafe.jpg" alt="pale blue electric guitar" width = "100" height = "100"/></a>
-                        <figcaption> {{body.author}} {{body.title}},{{body.price}} {{body.location}}</figcaption>
+                        <img src="itemImages/{{this.id}}.jpeg" alt="" width = "200" height = "200"/></a>
+                        <figcaption> {{this.title}}, {{this.price}} £</figcaption>
                     </figure>
                 </section>
                 {{/each}}
         </section>
-        {{/each}}
+        
     </body>
 </html>
