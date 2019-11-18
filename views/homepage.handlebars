@@ -9,8 +9,8 @@
     <body>
         <h1> The Gallery</h1>
         <nav class = "nav"> 
-            <a class="current" href="/">Home</a>
-            <a href="#login">Login</a>
+            <a class="current" href="/homepage">Home</a>
+            <a href="/login">Login</a>
             <a href="#about">About Us</a>
             <a href="#support">Support</a>
             <input type="text" placeholder="Search ...">
@@ -23,7 +23,7 @@
                 <section class = "column">
                     <figure>
                         <a href="art"></a>
-                        <img src="itemImages/{{this.id}}.jpeg" alt="" width = "200" height = "200"/></a>
+                        <img src="itemImages/{{this.id}}.jpeg" alt="Picture of an artpiece for sale" width = "200" height = "200"/></a>
                         <figcaption> {{this.title}}, {{this.price}} £</figcaption>
                     </figure>
                 </section>

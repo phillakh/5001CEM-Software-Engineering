@@ -111,7 +111,7 @@ router.post('/login', async ctx => {
 		ctx.session.authorised = true
 		ctx.session.username = body.user
 
-		return ctx.redirect('/')
+		return ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -167,8 +167,27 @@ router.get('/homepage', async ctx => {
 	try {
 		const display = await new Display()
 		const data = await display.list('website.db')
-		console.log(data)
 		await ctx.render('homepage', {item: data} )
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+/**
+ * The details page.
+ *
+ * @name details Page
+ * @route {GET} /details
+ */
+
+router.get('/details/:id', async ctx => {
+	try {
+		const display = await new Display()
+		const data = await display.details('website.db', ctx.params.id)
+		console.log(ctx.params.id)
+		console.log(data)
+		await ctx.render('details', data )
+		
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
