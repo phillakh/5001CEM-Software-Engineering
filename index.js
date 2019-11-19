@@ -72,9 +72,9 @@ router.post('/register', koaBody, async ctx => {
 		console.log(body)
 		// call the functions in the module
 		const user = await new User(dbName)
-		await user.register(body.user, body.pass, body.email, body.phone)
+		await user.register(body.user, body.pass, body.email, body.phone, body.paypal)
 		const avatar = ctx.request.files.avatar
-		await user.uploadPicture(avatar.path, `image/${avatar.type}`)
+		await user.uploadPicture(avatar.path, `image/${avatar.type}`, body.user)
 		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
 	} catch(err) {
@@ -147,10 +147,10 @@ router.post('/upload', koaBody, async ctx => {
 		// call the functions in the module
 		const user = await new User(dbName)
 
-		await user.uploadItem(ctx.request.files.itemImage.path, body)
+		const id = await user.uploadItem(ctx.request.files.itemImage.path, body)
 
 		// redirect to the home page
-		ctx.redirect(`/?msg=new user "${body.name}" added`)
+		ctx.redirect(`/details/${id}`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

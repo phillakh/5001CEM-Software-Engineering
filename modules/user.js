@@ -13,7 +13,7 @@ module.exports = class User {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			// we need this table to store the user accounts
-			const sqlUsersTable = 'user TEXT, pass TEXT, email TEXT, phone INTEGER);'
+			const sqlUsersTable = 'user TEXT, pass TEXT, email TEXT, phone INTEGER, paypal TEXT);'
 			const sql = `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, ${ sqlUsersTable}`
 			await this.db.run(sql)
 			// we need this table to store the user items
@@ -26,7 +26,7 @@ module.exports = class User {
 		})()
 	}
 
-	async register(user, pass, email, phone) {
+	async register(user, pass, email, phone, paypal) {
 		try {
 			if(user.length === 0) throw new Error('missing username')
 			if(pass.length === 0) throw new Error('missing password')
@@ -34,8 +34,8 @@ module.exports = class User {
 			const data = await this.db.get(sql)
 			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
 			pass = await bcrypt.hash(pass, saltRounds)
-			sql = `INSERT INTO users(user, pass, email, phone) VALUES("${user}", "${pass}", "${email}", 
-			"${phone}")`
+			sql = `INSERT INTO users(user, pass, email, phone, paypal) VALUES("${user}", "${pass}", "${email}", 
+			"${phone}", "${paypal}")`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
@@ -43,11 +43,11 @@ module.exports = class User {
 		}
 	}
 
-	async uploadPicture(path, mimeType) {
+	async uploadPicture(path, mimeType, username) {
 		const extension = mime.extension(mimeType)
 		console.log(`path: ${path}`)
 		console.log(`extension: ${extension}`)
-		await fs.copy(path, `public/avatars/${this.username}.jpeg`)
+		await fs.copy(path, `public/avatars/${username}.jpeg`)
 	}
 
 	async login(username, password) {
@@ -72,11 +72,13 @@ module.exports = class User {
 			if(itemInfo.price.length === 0) throw new Error('missing price')
 			const sqlID = 'SELECT count(id) AS count FROM items;'
 			const records = await this.db.get(sqlID)
-			await fs.copy(path, `public/itemImages/${records.count+1}.jpeg`)
+			const id = records.count+1
+			await fs.copy(path, `public/itemImages/${id}.jpeg`)
 			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price, owner) '
 			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
 			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`
 			await this.db.run(sql + sql2 + sql3)
+			return id 
 		} catch(err) {
 			throw err
 		}
