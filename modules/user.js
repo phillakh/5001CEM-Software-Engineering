@@ -13,8 +13,8 @@ module.exports = class User {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			// we need this table to store the user accounts
-			const sqlUsersTable = '(id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT, email TEXT, phone INTEGER);'
-			const sql = `CREATE TABLE IF NOT EXISTS users ${ sqlUsersTable}`
+			const sqlUsersTable = 'user TEXT, pass TEXT, email TEXT, phone INTEGER);'
+			const sql = `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, ${ sqlUsersTable}`
 			await this.db.run(sql)
 			// we need this table to store the user items
 			const sqlItemsTable1 = '(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, '
@@ -34,8 +34,6 @@ module.exports = class User {
 			const data = await this.db.get(sql)
 			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
 			pass = await bcrypt.hash(pass, saltRounds)
-			const isnum = /^\d+$/.test(phone);
-			if(!isnum) throw new Error(`${phone} is not a valid phone number`)
 			sql = `INSERT INTO users(user, pass, email, phone) VALUES("${user}", "${pass}", "${email}", 
 			"${phone}")`
 			await this.db.run(sql)
@@ -72,7 +70,7 @@ module.exports = class User {
 
 			if(itemInfo.title.length === 0) throw new Error('missing title')
 			if(itemInfo.price.length === 0) throw new Error('missing price')
-			let sqlID = `SELECT count(id) AS count FROM items;`
+			const sqlID = 'SELECT count(id) AS count FROM items;'
 			const records = await this.db.get(sqlID)
 			await fs.copy(path, `public/itemImages/${records.count+1}.jpeg`)
 			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price, owner) '
