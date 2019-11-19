@@ -4,6 +4,7 @@
 	<head>
 		<title>{{title}}</title>
 		<link href="details.css" type="text/css" rel="stylesheet" />
+		<link href="popupForm.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 		<h1>{{title}}</h1>
@@ -31,5 +32,15 @@
 			<footer>{{longDesc}}</footer>
 		</aside>
 
+		<button type="button" id="button">Interested</button>
+        <section class="bg-modal">
+            <section class="modal-content">
+                <section class="close">+</section>
+                <form action="">
+                    <input type="text" placeholder = "1-5">
+                    <a href="" class="button" value="{{popupForm}}">Sumbit</a>
+                </form>
+            </section>
+        </section>
 	</body>
 </html>
