@@ -193,5 +193,17 @@ router.get('/details/:id', async ctx => {
 	}
 })
 
+router.get('/user-homepage/:uid', async ctx => {
+	try {
+		// let uID = ctx.params.uid
+		// Query the db to get a user given an uID
+		let uesrInfo
+		await ctx.render('user', {user: userInfo} )
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+
 app.use(router.routes())
 module.exports = app.listen(port, async() => console.log(`listening on port ${port}`))
