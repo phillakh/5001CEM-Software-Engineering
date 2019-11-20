@@ -3,8 +3,8 @@
 <html lang="en">
 	<head>
 		<title>{{title}}</title>
-		<link href="details.css" type="text/css" rel="stylesheet" />
-		<link href="popupForm.css" type="text/css" rel="stylesheet" />
+		<link href="../details.css" type="text/css" rel="stylesheet" />
+		<link href="../popupForm.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 		<h1>{{title}}</h1>
@@ -29,7 +29,9 @@
 		</section>
 
 		<aside class='imageSide'>
-			<img  class='artPicture' src="../itemImages/{{id}}.jpeg" alt="Picture of the Art Piece"/>
+			<img  id="artwork" class='artPicture' src="../itemImages/{{id}}.jpeg" alt="Picture of the Art Piece"/>
+			<button onclick="pictureChange('prev')"><</button>
+			<button onclick="pictureChange('next')">></button>
 			<footer>{{longDesc}}</footer>
 		</aside>
 
@@ -44,4 +46,22 @@
             </section>
         </section>
 	</body>
+	<script>	
+		var currentImage = 0
+		// add array of images from database
+		images = ["../images/2.Jpg", "../images/3.Jpg", "../images/4.Jpg"];
+	function pictureChange(param)
+	{
+		if(param === 'next')
+      	{
+        	currentImage++;
+            if(i === images.length){ currentImage = images.length - 1; }
+		}
+		else{
+            currentImage--;
+            if(currentImage < 0){ currentImage = 0; }
+        }
+		document.getElementById('artwork').src=images[currentImage];
+	}
+	</script>
 </html>
