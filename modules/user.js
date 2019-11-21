@@ -65,7 +65,20 @@ module.exports = class User {
 		}
 	}
 
-	async uploadItem(path, itemInfo) {
+	async directoryMaker(directory) {
+		if (!fs.existsSync(directory)){
+			fs.mkdirSync(directory);
+		}
+	}
+
+	async uploadItemPictures(imageArray, id) {
+		for (let i = 0; i < imageArray.length; i++) {
+			await fs.copy(imageArray[i].path, `public/itemImages/${id}/${i}.jpeg`)
+		}
+		
+	}
+
+	async uploadItem(imageArray, itemInfo) {
 		try{
 
 			if(itemInfo.title.length === 0) throw new Error('missing title')
@@ -73,7 +86,8 @@ module.exports = class User {
 			const sqlID = 'SELECT count(id) AS count FROM items;'
 			const records = await this.db.get(sqlID)
 			const id = records.count+1
-			await fs.copy(path, `public/itemImages/${id}.jpeg`)
+			await this.directoryMaker(`public/itemImages/${id}`)
+			await this.uploadItemPictures(imageArray, id)
 			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price, owner) '
 			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
 			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`

@@ -146,8 +146,8 @@ router.post('/upload', koaBody, async ctx => {
 		body.owner = ctx.session.username
 		// call the functions in the module
 		const user = await new User(dbName)
-
-		const id = await user.uploadItem(ctx.request.files.itemImage.path, body)
+		
+		const id = await user.uploadItem(ctx.request.files[`itemImages[]`], body)
 
 		// redirect to the home page
 		ctx.redirect(`/details/${id}`)
