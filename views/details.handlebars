@@ -29,10 +29,13 @@
 		</section>
 
 		<aside class='imageSide'>
-			<img  id="artwork" class='artPicture' src="../itemImages/{{id}}/0.jpeg" alt="Picture of the Art Piece"/>
+			<img id="artwork" class='artPicture' src="../itemImages/{{id}}/0.jpg" alt="Picture of the Art Piece"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/0.jpg" alt="Picture of the Art Piece"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/1.jpg" alt="Picture of the Art Piece"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/2.jpg" alt="Picture of the Art Piece"/>
 			<button onclick="pictureChange('prev')"><</button>
 			<button onclick="pictureChange('next')">></button>
-			<footer>{{longDesc}}</footer>
+			<footer class="imageSideFooter">{{longDesc}}</footer>
 		</aside>
 
 		<button type="button" id="button">Interested</button>
@@ -48,14 +51,14 @@
 	</body>
 	<script>	
 		var currentImage = 0
-		// add array of images from database
-		images = ["../images/2.Jpg", "../images/3.Jpg", "../images/4.Jpg"];
+		// set array length based on number of images added
+		images = ["../itemImages/{{id}}/0.jpg", "../itemImages/{{id}}/1.jpg", "../itemImages/{{id}}/2.jpg"];
 	function pictureChange(param)
 	{
 		if(param === 'next')
       	{
         	currentImage++;
-            if(i === images.length){ currentImage = images.length - 1; }
+            if(currentImage === images.length){ currentImage = images.length - 1; }
 		}
 		else{
             currentImage--;
