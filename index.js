@@ -205,7 +205,7 @@ router.get('/user-homepage/:uid', async ctx => {
 	try {
 		// let uID = ctx.params.uid
 		// Query the db to get a user given an uID
-		let uesrInfo
+		let userInfo
 		await ctx.render('user', {user: userInfo} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
