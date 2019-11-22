@@ -5,6 +5,7 @@
 'use strict'
 
 /* MODULE IMPORTS */
+const querystring = require('querystring');
 const Koa = require('koa')
 const Router = require('koa-router')
 const views = require('koa-views')
@@ -193,16 +194,72 @@ router.get('/details/:id', async ctx => {
 	}
 })
 
+/**
+ * The user page with all their items.
+ *
+ * @name user-homepage Page
+ * @route {GET} /user-homepage/:uid
+ */
+
 router.get('/user-homepage/:uid', async ctx => {
 	try {
 		// let uID = ctx.params.uid
 		// Query the db to get a user given an uID
-		let uesrInfo
+		let userInfo
 		await ctx.render('user', {user: userInfo} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 })
+
+/**
+ * The search page to search globally for items.
+ *
+ * @name search Page
+ * @route {GET} /search
+ */
+
+router.get('/search', async ctx => {
+	let results = {}
+	await ctx.render('search', {item: results})
+
+})
+
+/**
+ * The search page to search globally for items.
+ *
+ * @name search Page
+ * @route {POST} /search
+ */
+
+/**
+ * Fake Paypal page.
+ *
+ * @name paypal Page
+ * @route {GET} /paypal
+ */
+
+router.get('/paypal', async ctx => {
+	try {
+		const display = await new Display()
+		const data = await display.list('website.db')
+		await ctx.render('paypal', {item: data} )
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+router.post('/search', koaBody, async ctx => {
+	try {
+		const query = ctx.request.body.query
+		const display = await new Display()
+		let results = await display.search('website.db', query)
+		await ctx.render(`search`, {item: results})
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
 
 
 app.use(router.routes())

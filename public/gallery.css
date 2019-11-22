@@ -58,3 +58,8 @@ img{
     margin-right: 16px;
     font-size: 17px;
 }
+
+#search{
+    width:600px;
+    margin: 3em;
+}
