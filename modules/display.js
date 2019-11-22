@@ -58,4 +58,22 @@ module.exports = class Display {
 			throw err
 		}
 	}
+	async userDetails(dbName, id) {
+		try {
+			const sql = `SELECT id, user, email, phone FROM users WHERE id = "${id}";`
+			if (typeof dbName === 'object') {
+				const data = await dbName.get(sql)
+				await dbName.close()
+				return data
+			} else {
+				const db = await sqlite.open(dbName)
+				const data = await db.get(sql)
+				await db.close()
+				return data
+			}
+		} catch(err) {
+			throw err
+		}
+	}
 }
+
