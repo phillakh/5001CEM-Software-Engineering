@@ -36,15 +36,19 @@
 			<button onclick="pictureChange('prev')"><</button>
 			<button onclick="pictureChange('next')">></button>
 			<footer class="imageSideFooter">{{longDesc}}</footer>
+			<p id="demo"></p>
 		</aside>
 
 		<button type="button" id="button">Interested</button>
         <section class="bg-modal">
             <section class="modal-content">
-                <section class="close">+</section>
+				<p>How Interested are you?</p>
+                <section class="close"> X </section>
                 <form action="">
-                    <input type="text" placeholder = "1-5">
-                    <a href="" class="button" value="{{popupForm}}">Sumbit</a>
+					<input type="checkbox" name="option1" id="option1" value="low interest"> Low Interest<br>
+					<input type="checkbox" name="option2" id="option2" value="medium interest"> Medium Interest<br>
+					<input type="checkbox" name="option3" id="option3" value="high interest"> High Interest<br>
+                    <a href="" class="button" id="submit">Sumbit</a>
                 </form>
             </section>
         </section>
@@ -56,11 +60,10 @@
 				document.querySelector('.bg-modal').style.display = "flex";
 			});
 
-		document.querySelector('.close').addEventListener('click', 
+		document.getElementById("close").addEventListener('click', 
 			function(){
 				document.querySelector('bg-modal').style.display = "none";
 			});	
-
 		//Picture change button	
 		var currentImage = 0
 		// set array length based on number of images added
