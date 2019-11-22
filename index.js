@@ -205,7 +205,8 @@ router.get('/user-homepage/:uid', async ctx => {
 	try {
 		// let uID = ctx.params.uid
 		// Query the db to get a user given an uID
-		let userInfo
+		const display= await new Display()
+		let userInfo= await display.userDetails('website.db', ctx.params.uid)
 		await ctx.render('user', {user: userInfo} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
