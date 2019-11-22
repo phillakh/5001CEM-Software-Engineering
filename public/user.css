@@ -1,0 +1,12 @@
+body{
+    margin:5em;
+    padding: 0;
+    border: 1px solid darkgray ;
+}
+h1{
+    border: 1px solid blue;
+    border-width: 2.5px;
+    text-align: center;
+    font-size: 200%;
+    margin: 2.5em;  
+}
