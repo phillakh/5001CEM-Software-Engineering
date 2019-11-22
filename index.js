@@ -214,6 +214,24 @@ router.get('/user-homepage/:uid', async ctx => {
 })
 
 /**
+ * Fake Paypal page.
+ *
+ * @name paypal Page
+ * @route {GET} /paypal
+ */
+
+router.get('/paypal', async ctx => {
+	try {
+		const display = await new Display()
+		const data = await display.list('website.db')
+		await ctx.render('paypal', {item: data} )
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+
+/**
  * The search page to search globally for items.
  *
  * @name search Page
@@ -232,23 +250,6 @@ router.get('/search', async ctx => {
  * @name search Page
  * @route {POST} /search
  */
-
-/**
- * Fake Paypal page.
- *
- * @name paypal Page
- * @route {GET} /paypal
- */
-
-router.get('/paypal', async ctx => {
-	try {
-		const display = await new Display()
-		const data = await display.list('website.db')
-		await ctx.render('paypal', {item: data} )
-	} catch(err) {
-		await ctx.render('error', {message: err.message})
-	}
-})
 
 router.post('/search', koaBody, async ctx => {
 	try {
