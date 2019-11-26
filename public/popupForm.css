@@ -4,7 +4,6 @@
     background-color: rgba(0,0,0,0.7);
     position: absolute;
     top: 0; 
-    display: flex;
     justify-content: center ;
     align-items: center;
     display: none;
@@ -28,6 +27,15 @@ input{
     top: 0;
     right: 14px;
     font-size: 42PX;
-    transform: rotate(45deg);
     cursor: pointer;
+    border: none;
+}
+.p1{
+    display: none;
+}
+.p2{
+    display: none;
+}
+.p3{
+    display: none;
 }
