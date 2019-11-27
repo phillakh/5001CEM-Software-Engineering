@@ -15,7 +15,7 @@
     "unit": "node_modules/.bin/jest --coverage --runInBand tests/unit/"
   },
   "pre-commit": [
-    "test"
+    "test", "linter"
   ],
   "jest": {
     "projects": [
