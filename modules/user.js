@@ -66,16 +66,20 @@ module.exports = class User {
 	}
 
 	async directoryMaker(directory) {
-		if (!fs.existsSync(directory)){
-			fs.mkdirSync(directory);
+		if (!fs.existsSync(directory)) {
+			fs.mkdirSync(directory)
 		}
 	}
 
 	async uploadItemPictures(imageArray, id) {
-		for (let i = 0; i < imageArray.length; i++) {
-			await fs.copy(imageArray[i].path, `public/itemImages/${id}/${i}.jpeg`)
+		if(imageArray.length) {
+			for (let i = 0; i < imageArray.length; i++) {
+				await fs.copy(imageArray[i].path, `public/itemImages/${id}/${i}.jpeg`)
+			}
+		}else{
+			fs.copy(imageArray.path, `public/itemImages/${id}/0.jpeg`)
 		}
-		
+
 	}
 
 	async uploadItem(imageArray, itemInfo) {
@@ -92,7 +96,7 @@ module.exports = class User {
 			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
 			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`
 			await this.db.run(sql + sql2 + sql3)
-			return id 
+			return id
 		} catch(err) {
 			throw err
 		}
