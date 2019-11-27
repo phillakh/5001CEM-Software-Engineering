@@ -1,9 +1,11 @@
-document.getElementById("button").addEventListener('click',
-function(){
-    document.querySelector('.bg-modal').style.display = "flex";
-});
+'use strict'
 
-document.querySelector('.close').addEventListener('click', 
-function(){
-    document.querySelector('bg-modal').style.display = "none";
-});
+document.getElementById('button').addEventListener('click',
+	() => {
+		document.querySelector('.bg-modal').style.display = 'flex'
+	})
+
+document.querySelector('.close').addEventListener('click',
+	() => {
+		document.querySelector('bg-modal').style.display = 'none'
+	})

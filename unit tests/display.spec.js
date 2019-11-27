@@ -42,8 +42,6 @@ describe('list()', () => {
 		expect(list).toEqual(rightResults)
 		done()
 	})
-
-
 })
 
 describe('details()', () => {

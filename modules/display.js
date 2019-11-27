@@ -43,14 +43,15 @@ module.exports = class Display {
 
 	async search(dbName, query) {
 		try {
-			const sql = `SELECT id, title, price FROM items WHERE title LIKE "%${query}%" OR longDesc LIKE "%${query}%" OR shortDesc LIKE "%${query}%";`
+			const sql = 'SELECT id, title, price FROM items WHERE title '
+			const sqlCondition = `LIKE "%${query}%" OR longDesc LIKE "%${query}%" OR shortDesc LIKE "%${query}%";`
 			if (typeof dbName === 'object') {
-				const data = await dbName.all(sql)
+				const data = await dbName.all(sql + sqlCondition)
 				await dbName.close()
 				return data
 			} else {
 				const db = await sqlite.open(dbName)
-				const data = await db.all(sql)
+				const data = await db.all(sql + sqlCondition)
 				await db.close()
 				return data
 			}
