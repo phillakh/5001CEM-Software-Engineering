@@ -42,48 +42,17 @@
 			<p class="p3">High interest</p>
 		</aside>
 
-		<button type="button" id="button">Interested ...</button>
-        <section class="bg-modal">
-            <section class="modal-content">
-				<p>How Interested are you?</p>
-                <button type="button" class="close" id="close"> X </button>
-                <form action="">
-					<input type="checkbox" name="option1" id="option1" value="low interest"> Low Interest<br>
-					<input type="checkbox" name="option2" id="option2" value="medium interest"> Medium Interest<br>
-					<input type="checkbox" name="option3" id="option3" value="high interest"> High Interest<br>
-                    <button type="button" id="submit">SUMBIT</button>
-                </form>
-            </section>	
-        </section>
+		<section class = "interest">
+			<p>How Interested are you?</p>
+			<form action="/details" enctype="multipart/form-data" method="post">
+				<input type="checkbox" name="option1" id="option1" value="low interest"> Low Interest<br>
+				<input type="checkbox" name="option2" id="option2" value="medium interest"> Medium Interest<br>
+				<input type="checkbox" name="option3" id="option3" value="high interest"> High Interest<br>
+				<input type="submit" value="create">
+			</form>
+		</section>
 	</body>
 	<script>
-		//Interested Button
-		document.getElementById("button").addEventListener('click',
-			function open(){
-				document.querySelector('.bg-modal').style.display = "flex";
-			});
-
-		document.getElementById("close").addEventListener('click', 
-			function close(){
-				document.querySelector('.bg-modal').style.display = "none";
-			});
-		//Writes to HTML page about the interested product.
-		document.getElementById("submit").addEventListener('click',
-			function (){
-				var low = document.getElementById('option1').checked;
-				var medium = document.getElementById('option2').checked;
-				var high = document.getElementById('option3').checked;
-				
-				if(low){
-					document.querySelector('.p1').style.display = "block";
-				}
-				if(medium){
-					document.querySelector('.p2').style.display = "block";
-				}
-				if(high){
-					document.querySelector('.p3').style.display = "block";
-				}	
-			});	
 		//Picture change button	
 		var currentImage = 0
 		// set array length based on number of images added
