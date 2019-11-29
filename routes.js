@@ -65,7 +65,7 @@ router.get('/details/:id', async ctx => {
 
 router.post('/details', koaBody, async ctx => {
 	try {
-		
+
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

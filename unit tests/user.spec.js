@@ -10,14 +10,12 @@ describe('display details()', () => {
 			//console.log("Passed constructor")
 			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
 			const user = await account.getUser('doej')
-			console.log("User: ", user)
+			console.log('User: ', user)
 			expect(user.email).toBe('email@email.com')
 			expect(user.phone).toBe(123456789)
 			done()
-		}
-		catch (err)
-		{
-			console.log("Display error: ", err)
+		} catch (err) {
+			console.log('Display error: ', err)
 		}
 	})
 })
@@ -48,11 +46,9 @@ describe('register()', () => {
 			const account = await new Accounts()
 			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
 			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
-		}
-		catch(err) {
+		} catch(err) {
 			expect(err.message).toBe('username "doej" already in use')
-		}
-		finally{
+		} finally{
 			done()
 		}
 	})
@@ -62,11 +58,9 @@ describe('register()', () => {
 			expect.assertions(1)
 			const account = await new Accounts()
 			await account.register('', 'password', 'email@email.com', '123456789', 'paypal')
-		}
-		catch(err) {
+		} catch(err) {
 			expect(err.message).toBe('missing username')
-		}
-		finally{
+		} finally{
 			done()
 		}
 	})
@@ -76,11 +70,9 @@ describe('register()', () => {
 			expect.assertions(1)
 			const account = await new Accounts()
 			await expect( await account.register('doej', '', 'email@email.com', '123456789', 'paypal') )
-		}
-		catch(err) {
+		} catch(err) {
 			expect(err.message).toBe('missing password')
-		}
-		finally{
+		} finally{
 			done()
 		}
 	})
@@ -108,11 +100,9 @@ describe('login()', () => {
 			const account = await new Accounts()
 			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
 			await expect(await account.login('roej', 'password') )
-		}
-		catch(err) {
+		} catch(err) {
 			expect(err.message).toBe('username "roej" not found')
-		}
-		finally{
+		} finally{
 			done()
 
 		}
@@ -124,11 +114,9 @@ describe('login()', () => {
 			const account = await new Accounts()
 			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
 			await expect( await account.login('doej', 'bad') )
-		}
-		catch(err) {
+		} catch(err) {
 			expect(err.message).toBe('doej', 'bad')
-		}
-		finally{
+		} finally{
 			done()
 		}
 	})

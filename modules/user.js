@@ -12,17 +12,19 @@ module.exports = class User {
 	constructor(dbName = ':memory:') {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
-			// we need this table to store the user accounts
 			const sqlUsersTable = 'user TEXT, pass TEXT, email TEXT, phone INTEGER, paypal TEXT);'
 			const sql = `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, ${ sqlUsersTable}`
 			await this.db.run(sql)
-			console.log("User created.")
-			// we need this table to store the user items
+			console.log('User created.')
 			const sqlItemsTable1 = '(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, '
 			const sqlItemsTable2 = 'shortDesc TEXT, longDesc TEXT, price INTEGER, owner TEXT);'
 			const sqlItemsTable = 'CREATE TABLE IF NOT EXISTS items '
 			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}`
 			await this.db.run(sqlItems)
+			const sqlInterest2 = '(userid INTEGER, itemid INTEGER, interest TEXT, PRIMARY KEY(userid, itemid)'
+			const sqlInterest1 = 'CREATE TABLE IF NOT EXISTS interest '
+			const sqlInterest = `${ sqlInterest1}${ sqlInterest2}`
+			await this.db.run(sqlInterest)
 			return this
 		})()
 	}
