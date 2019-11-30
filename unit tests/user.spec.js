@@ -3,6 +3,33 @@
 
 const Accounts = require('../modules/user.js')
 
+describe('display details()', () => {
+	test('can retrieve an existing user', async done => {
+		try{
+			const account = await new Accounts(':memory:')
+			//console.log("Passed constructor")
+			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
+			const user = await account.getUser('doej')
+			console.log('User: ', user)
+			expect(user.email).toBe('email@email.com')
+			expect(user.phone).toBe(123456789)
+			done()
+		} catch (err) {
+			console.log('Display error: ', err)
+		}
+	})
+})
+
+/*describe('user form()', () => {
+	test('Form is presented', async done => {
+		const account = await new Accounts()
+		const form = await account.popupForm()
+		const click = document.getElementById('button').addEventListener('click')
+		expect(form.click).toBe(true)np
+		done()
+	})
+})*/
+
 describe('register()', () => {
 
 	test('register a valid account', async done => {
@@ -14,28 +41,40 @@ describe('register()', () => {
 	})
 
 	test('register a duplicate username', async done => {
-		expect.assertions(1)
-		const account = await new Accounts()
-		await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
-		await expect( account.register('doej', 'password', 'email@email.com', '123456789', 'paypal') )
-			.rejects.toEqual( Error('username "doej" already in use') )
-		done()
+		try{
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
+			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
+		} catch(err) {
+			expect(err.message).toBe('username "doej" already in use')
+		} finally{
+			done()
+		}
 	})
 
 	test('error if blank username', async done => {
-		expect.assertions(1)
-		const account = await new Accounts()
-		await expect( account.register('', 'password', 'email@email.com', '123456789', 'paypal') )
-			.rejects.toEqual( Error('missing username') )
-		done()
+		try{
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('', 'password', 'email@email.com', '123456789', 'paypal')
+		} catch(err) {
+			expect(err.message).toBe('missing username')
+		} finally{
+			done()
+		}
 	})
 
 	test('error if blank password', async done => {
-		expect.assertions(1)
-		const account = await new Accounts()
-		await expect( account.register('doej', '', 'email@email.com', '123456789', 'paypal') )
-			.rejects.toEqual( Error('missing password') )
-		done()
+		try{
+			expect.assertions(1)
+			const account = await new Accounts()
+			await expect( await account.register('doej', '', 'email@email.com', '123456789', 'paypal') )
+		} catch(err) {
+			expect(err.message).toBe('missing password')
+		} finally{
+			done()
+		}
 	})
 
 })
@@ -56,21 +95,30 @@ describe('login()', () => {
 	})
 
 	test('invalid username', async done => {
-		expect.assertions(1)
-		const account = await new Accounts()
-		await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
-		await expect( account.login('roej', 'password') )
-			.rejects.toEqual( Error('username "roej" not found') )
-		done()
+		try{
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
+			await expect(await account.login('roej', 'password') )
+		} catch(err) {
+			expect(err.message).toBe('username "roej" not found')
+		} finally{
+			done()
+
+		}
 	})
 
 	test('invalid password', async done => {
-		expect.assertions(1)
-		const account = await new Accounts()
-		await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
-		await expect( account.login('doej', 'bad') )
-			.rejects.toEqual( Error('invalid password for account "doej"') )
-		done()
+		try{
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
+			await expect( await account.login('doej', 'bad') )
+		} catch(err) {
+			expect(err.message).toBe('doej', 'bad')
+		} finally{
+			done()
+		}
 	})
 
 })

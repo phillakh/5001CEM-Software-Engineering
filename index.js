@@ -12,11 +12,9 @@ const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
 const router = require('./routes')
-
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
 const app = new Koa()
-
 /* CONFIGURING THE MIDDLEWARE */
 app.keys = ['darkSecret']
 app.use(staticDir('public'))
@@ -26,7 +24,7 @@ app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handleb
 const defaultPort = 8080
 const port = process.env.PORT || defaultPort
 const dbName = 'website.db'
-
+let currentUser = null
 /**
  * The secure home page.
  *
@@ -34,7 +32,6 @@ const dbName = 'website.db'
  * @route {GET} /
  * @authentication This route requires cookie-based authentication.
  */
-
 router.get('/', async ctx => {
 	try {
 		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
@@ -45,7 +42,6 @@ router.get('/', async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
 /**
  * The user registration page.
  *
@@ -53,7 +49,6 @@ router.get('/', async ctx => {
  * @route {GET} /register
  */
 router.get('/register', async ctx => await ctx.render('register'))
-
 /**
  * The script to process new user registrations.
  *
@@ -89,7 +84,6 @@ router.get('/login', async ctx => {
 	if(ctx.query.user) data.user = ctx.query.user
 	await ctx.render('login', data)
 })
-
 /**
  * The script to process user logins.
  *
@@ -103,6 +97,7 @@ router.post('/login', async ctx => {
 		const user = await new User(dbName)
 		await user.login(body.user, body.pass)
 		ctx.session.authorised = true
+		currentUser = body.user
 		ctx.session.username = body.user
 		return ctx.redirect('/homepage')
 	} catch(err) {
@@ -125,23 +120,30 @@ router.get('/upload', async ctx => await ctx.render('upload'))
  * @name Upload Script
  * @route {POST} /upload
  */
-
 router.post('/upload', koaBody, async ctx => {
 	try {
-		// extract the data from the request
 		const body = ctx.request.body
 		body.owner = ctx.session.username
-		// call the functions in the module
 		const user = await new User(dbName)
 		console.log(ctx.request.files['itemImages[]'])
 		const id = await user.uploadItem(ctx.request.files['itemImages[]'], body)
-		// redirect to the home page
 		await ctx.redirect(`/details/${id}`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 })
 
+router.get('/confirmation', async ctx => {
+	try {
+		const accounts = await new User('website.db')
+		const data = await accounts.getUser(currentUser)
+		console.log(data)
+		await ctx.render('confirmation',{user: data})
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+		console.log(err)
+	}
+})
 app.use(router.routes())
 app.use(router.allowedMethods())
 module.exports = app.listen(port, async() => console.log(`listening on port ${port}`))

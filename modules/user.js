@@ -12,20 +12,22 @@ module.exports = class User {
 	constructor(dbName = ':memory:') {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
-			// we need this table to store the user accounts
 			const sqlUsersTable = 'user TEXT, pass TEXT, email TEXT, phone INTEGER, paypal TEXT);'
 			const sql = `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, ${ sqlUsersTable}`
 			await this.db.run(sql)
-			// we need this table to store the user items
+			console.log('User created.')
 			const sqlItemsTable1 = '(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, '
 			const sqlItemsTable2 = 'shortDesc TEXT, longDesc TEXT, price INTEGER, owner TEXT);'
 			const sqlItemsTable = 'CREATE TABLE IF NOT EXISTS items '
 			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}`
 			await this.db.run(sqlItems)
+			const sqlInterest2 = '(userid INTEGER, itemid INTEGER, interest TEXT, PRIMARY KEY(userid, itemid)'
+			const sqlInterest1 = 'CREATE TABLE IF NOT EXISTS interest '
+			const sqlInterest = `${ sqlInterest1}${ sqlInterest2}`
+			await this.db.run(sqlInterest)
 			return this
 		})()
 	}
-
 	async register(user, pass, email, phone, paypal) {
 		try {
 			if(user.length === 0) throw new Error('missing username')
@@ -97,6 +99,22 @@ module.exports = class User {
 			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`
 			await this.db.run(sql + sql2 + sql3)
 			return id
+		} catch(err) {
+			throw err
+		}
+	}
+	async getUser(user) {
+		try {
+			const sql = `SELECT user, email, phone FROM users WHERE user ="${user}";`
+			if (typeof dbName === 'object') {
+				const data = await this.db.get(sql)
+				//await this.db.close()
+				return data
+			}else{
+				const data = await this.db.get(sql)
+				//await this.db.close()
+				return data
+			}
 		} catch(err) {
 			throw err
 		}
