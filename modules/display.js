@@ -59,9 +59,9 @@ module.exports = class Display {
 			throw err
 		}
 	}
-	async userDetails(dbName, id) {
+	async userDetails(dbName, user) {
 		try {
-			const sql = `SELECT id, user, email, phone FROM users WHERE id = "${id}";`
+			const sql = `SELECT id, user, email, phone FROM users WHERE user = "${user}";`
 			if (typeof dbName === 'object') {
 				const data = await dbName.get(sql)
 				await dbName.close()
