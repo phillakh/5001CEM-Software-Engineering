@@ -24,7 +24,6 @@ app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handleb
 const defaultPort = 8080
 const port = process.env.PORT || defaultPort
 const dbName = 'website.db'
-let currentUser = null
 /**
  * The secure home page.
  *
@@ -97,7 +96,6 @@ router.post('/login', async ctx => {
 		const user = await new User(dbName)
 		await user.login(body.user, body.pass)
 		ctx.session.authorised = true
-		currentUser = body.user
 		ctx.session.username = body.user
 		return ctx.redirect('/homepage')
 	} catch(err) {
@@ -136,7 +134,7 @@ router.post('/upload', koaBody, async ctx => {
 router.get('/confirmation', async ctx => {
 	try {
 		const accounts = await new User('website.db')
-		const data = await accounts.getUser(currentUser)
+		const data = await accounts.getUser(ctx.session.username)
 		console.log(data)
 		await ctx.render('confirmation',{user: data})
 	} catch(err) {
