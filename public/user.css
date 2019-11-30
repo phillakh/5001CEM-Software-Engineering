@@ -3,6 +3,7 @@ body{
     padding: 0;
     border: 1px solid darkgray ;
 }
+/*
 h1{
     border: 1px solid blue;
     border-width: 2.5px;
@@ -10,3 +11,21 @@ h1{
     font-size: 200%;
     margin: 2.5em;  
 }
+
+.nav a:hover{
+    background-color: #ddd;
+    color: black;
+}
+.nav a.current{
+    background-color: #2196F3;
+    color: white;
+}
+.nav input[type=text]{
+    float: right;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+}
+*/
