@@ -12,8 +12,10 @@ const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
 const router = require('./routes')
+let currentUser = null
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
+const seller = require('./modules/seller.js')
 const app = new Koa()
 /* CONFIGURING THE MIDDLEWARE */
 app.keys = ['darkSecret']
@@ -134,12 +136,23 @@ router.post('/upload', koaBody, async ctx => {
 router.get('/confirmation', async ctx => {
 	try {
 		const accounts = await new User('website.db')
-		const data = await accounts.getUser(ctx.session.username)
+		const body = ctx.request.body
+		ctx.session.username = body.user
+		const data = await accounts.getUser(currentUser)
 		console.log(data)
 		await ctx.render('confirmation',{user: data})
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 		console.log(err)
+	}
+})
+
+router.post('/confirmation', async ctx => {
+	try {
+		seller.sendEmail()
+		await ctx.render('confirmation')
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
 	}
 })
 app.use(router.routes())
