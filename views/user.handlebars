@@ -4,11 +4,12 @@
 	<head>
 		<meta charset="utf-8">
 		<title>User Homepage</title>
-		<link href="user.css" type="text/css" rel="stylesheet" />
+		<link href="/gallery.css" type="text/css" rel="stylesheet" />
+      
 	</head>
     <body>
         <header>
-            <h1>Gallery</h1>
+            <h1>The Gallery</h1>
         </header>
 
         <nav class = "nav"> 
@@ -17,6 +18,7 @@
             <a href="#about">About Us</a>
             <a href="/upload">Upload Art</a>
             <a href="/search">Search</a>
+            <a href= "/user-homepage/">My User Page</a>
         </nav> 
 
         <section>
@@ -24,6 +26,7 @@
 
             <h3>Username: {{user.user}}</h3>
             <h3>Email: {{user.email}}</h3>
-
+            <h3>Phone: {{user.phone}}</h3>
         </section>
     </body>
+</html>
