@@ -14,7 +14,7 @@
         <h1>Confirm Purchase</h1>
 
     <a class="payment">
-        <form>
+        <form method="POST" enctype="multipart/form-data" action="/confirmation">
             <a class="form-group owner">
                 <label for="Name on Card">Name on Card</label>
                 <input type="text" class="form-control" id="owner">
@@ -58,8 +58,9 @@
                 <img src="/images/amex.jpg" id="amex">
 
             <a class="form-group" id="pay-now">
-                <button type="submit" class="btn btn-default" id="Confirm Payment">Confirm</button>
-            <a href="/confirmation">Confirm</a>
+            
+            <button type="submit" class="btn btn-default" id="Confirm Payment">Confirm</button>
+            
         </form>
 
 </body>

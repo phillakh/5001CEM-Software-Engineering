@@ -4,15 +4,16 @@
     <head>
         <title> The Gallery</title>
         <link href="gallery.css" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="modules/seller.js"></script>
         <meta charset="utf-8"/>
     </head>
     <body>
         <h1> The Gallery</h1>
-        <p> Congratulations.<br> Payment has been successful.<br> An email will be sent out to the seller with your details.</p>
-        <p> Please check your details below are correct. If they are press yes and the email will be sent.</p>
-      
+        <p> Congratulations.<br> Payment has been successful.<br> An email has been sent out to the seller with your details below.</p> 
+
         <p>{{user.user}}</p>
         <p>{{user.email}}</p>
+        <p>{{user.phone}}</p>
 
         <a href="/homepage">Back To Homepage</a>
     </body>

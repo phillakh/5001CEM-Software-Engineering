@@ -17,10 +17,14 @@ const mailOptions = {
 	html: '<p>{{username}} and your password is {{password}}</p>'
 }
 
-transported.sendMail(mailOptions, (error, info) => {
-	if (error) {
-		console.log(error)
-	} else {
-		console.log(`Email has been sent:${ info.response}`)
-	}
-})
+const sendEmail = () => {
+	transported.sendMail(mailOptions, (error, info) => {
+		if (error) {
+			console.log(error)
+		} else {
+			console.log(`Email has been sent:${ info.response}`)
+		}
+	})
+}
+
+module.exports.sendEmail = sendEmail
