@@ -78,15 +78,22 @@ router.post('/details', koaBody, async ctx => {
  * @route {GET} /user-homepage/:uid
  */
 
-router.get('/user-homepage/:uid', async ctx => {
-	try {
+router.get('/user-homepage/', async ctx => {
+	if (ctx.session.authorised !== true) {
+		ctx.redirect('/homepage')
+	}
+	else {
 		// let uID = ctx.params.uid
 		// Query the db to get a user given an uID
-		const display= await new Display()
-		const userInfo= await display.userDetails('website.db', ctx.params.uid)
-		await ctx.render('user', {user: userInfo} )
-	} catch(err) {
-		await ctx.render('error', {message: err.message})
+		// console.log(ctx.session.username)
+		// const display= await new Display()
+		// const userInfo= await display.userDetails('website.db', ctx.session.username)
+		// await ctx.render('user', {user: userInfo} )
+		const display = await new Display()
+		console.log(ctx.session.username)
+		const data = await display.userDetails('website.db', ctx.session.username)
+		console.log(data)
+		await ctx.render('user', {user: data} )
 	}
 })
 
