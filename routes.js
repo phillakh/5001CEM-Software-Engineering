@@ -63,9 +63,12 @@ router.get('/details/:id', async ctx => {
 	}
 })
 
-router.post('/details', koaBody, async ctx => {
+router.post('/details/:id', koaBody, async ctx => {
 	try {
-
+		const user = await new User()
+		console.log(ctx.request.body.interest)
+		user.setInterest(ctx.session.username, ctx.params.id, ctx.request.body.interest)
+		ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

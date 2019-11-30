@@ -46,6 +46,7 @@ img {
 }
 .interest
 {
+    width: 20%;
     clear: both;
     position: relative;
     height: 200px;

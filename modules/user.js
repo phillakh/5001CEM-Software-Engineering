@@ -15,13 +15,12 @@ module.exports = class User {
 			const sqlUsersTable = 'user TEXT, pass TEXT, email TEXT, phone INTEGER, paypal TEXT);'
 			const sql = `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, ${ sqlUsersTable}`
 			await this.db.run(sql)
-			console.log('User created.')
 			const sqlItemsTable1 = '(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, '
 			const sqlItemsTable2 = 'shortDesc TEXT, longDesc TEXT, price INTEGER, owner TEXT);'
 			const sqlItemsTable = 'CREATE TABLE IF NOT EXISTS items '
 			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}`
 			await this.db.run(sqlItems)
-			const sqlInterest2 = '(userid INTEGER, itemid INTEGER, interest TEXT, PRIMARY KEY(userid, itemid)'
+			const sqlInterest2 = '(user TEXT, itemid INTEGER, interest TEXT, PRIMARY KEY(user, itemid)'
 			const sqlInterest1 = 'CREATE TABLE IF NOT EXISTS interest '
 			const sqlInterest = `${ sqlInterest1}${ sqlInterest2}`
 			await this.db.run(sqlInterest)
@@ -115,6 +114,20 @@ module.exports = class User {
 				//await this.db.close()
 				return data
 			}
+		} catch(err) {
+			throw err
+		}
+	}
+	async setInterest(user, itemid, interest) {
+		try {
+			if(user.length === 0) throw new Error('missing username')
+			if(pass.length === 0) throw new Error('missing password')
+			let sql = `SELECT COUNT(user) as records FROM interest WHERE user="${user}" AND itemid="${itemid}";`
+			const data = await this.db.get(sql)
+			sql = `INSERT INTO interest(user, itemid, interest) VALUES("${user}", "${itemid}", "${interest}");` 
+			if(data.records !== 0) sql = `UPDATE interest SET interest = '${interest}' WHERE user="${user}"
+			 AND itemid="${itemid}";`
+			await this.db.run(sql)
 		} catch(err) {
 			throw err
 		}

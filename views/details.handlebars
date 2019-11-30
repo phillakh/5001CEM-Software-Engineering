@@ -44,11 +44,9 @@
 
 		<section class = "interest">
 			<p>How Interested are you?</p>
-			<form action="/details" enctype="multipart/form-data" method="post">
-				<input type="checkbox" name="option1" id="option1" value="low interest"> Low Interest<br>
-				<input type="checkbox" name="option2" id="option2" value="medium interest"> Medium Interest<br>
-				<input type="checkbox" name="option3" id="option3" value="high interest"> High Interest<br>
-				<input type="submit" value="create">
+			<form action="/details/:id" enctype="multipart/form-data" method="post">
+				<input type="range" name="interest" min='1' max='3' value="l"><br>
+				<input type="submit" value="Submit">
 			</form>
 		</section>
 	</body>
