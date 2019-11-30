@@ -106,6 +106,7 @@ router.post('/login', async ctx => {
 		ctx.session.authorised = true
 		currentUser = body.user
 		ctx.session.username = body.user
+		console.log(ctx.session.username)
 		return ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
