@@ -107,11 +107,9 @@ module.exports = class User {
 			const sql = `SELECT user, email, phone FROM users WHERE user ="${user}";`
 			if (typeof dbName === 'object') {
 				const data = await this.db.get(sql)
-				await this.db.close()
 				return data
 			}else{
 				const data = await this.db.get(sql)
-				await this.db.close()
 				return data
 			}
 		} catch(err) {

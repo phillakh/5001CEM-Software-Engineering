@@ -3,7 +3,7 @@
 
 const Accounts = require('../modules/user.js')
 
-describe('display details()', () => {
+describe('call user details()', () => {
 	test('can retrieve an existing user', async done => {
 		try{
 			const account = await new Accounts(':memory:')
@@ -18,17 +18,20 @@ describe('display details()', () => {
 			console.log('Display error: ', err)
 		}
 	})
-})
 
-/*describe('user form()', () => {
-	test('Form is presented', async done => {
-		const account = await new Accounts()
-		const form = await account.popupForm()
-		const click = document.getElementById('button').addEventListener('click')
-		expect(form.click).toBe(true)np
-		done()
+	test('username does not match', async done => {
+		try{
+			const account = await new Accounts(':memory:')
+			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
+			await expect(await account.getUser('smithj'))
+		} catch (err) {
+			console.log('username does not match: ', err)
+		} finally{
+			done()
+		}
 	})
-})*/
+
+})
 
 describe('register()', () => {
 
