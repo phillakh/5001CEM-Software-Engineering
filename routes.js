@@ -16,16 +16,14 @@ const session = require('koa-session')
 /* IMPORT CUSTOM MODULES */
 const Display = require('./modules/display.js')
 const app = new Koa()
-
+const User = require('./modules/user')
 /* CONFIGURING THE MIDDLEWARE */
 app.keys = ['darkSecret']
 app.use(staticDir('public'))
 app.use(bodyParser())
 app.use(session(app))
 app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handlebars: 'handlebars' }}))
-
 'use strict'
-
 const router = new Router()
 
 /**
@@ -56,6 +54,8 @@ router.get('/details/:id', async ctx => {
 	try {
 		const display = await new Display()
 		const data = await display.details('website.db', ctx.params.id)
+		data.userid = await display.userToUserId('website.db', data.owner)
+		ctx.session.item = ctx.params.id
 		await ctx.render('details', data )
 
 	} catch(err) {
@@ -63,12 +63,12 @@ router.get('/details/:id', async ctx => {
 	}
 })
 
-router.post('/details/:id', koaBody, async ctx => {
+router.post('/details', koaBody, async ctx => {
 	try {
-		const user = await new User()
-		console.log(ctx.request.body.interest)
-		user.setInterest(ctx.session.username, ctx.params.id, ctx.request.body.interest)
-		ctx.redirect('/homepage')
+		const user = await new User('website.db')
+		await user.setInterest(ctx.session.username, ctx.session.item, ctx.request.body.interest)
+		
+		await ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -83,11 +83,10 @@ router.post('/details/:id', koaBody, async ctx => {
 
 router.get('/user-homepage/:uid', async ctx => {
 	try {
-		// let uID = ctx.params.uid
-		// Query the db to get a user given an uID
 		const display= await new Display()
 		const userInfo= await display.userDetails('website.db', ctx.params.uid)
-		await ctx.render('user', {user: userInfo} )
+		const interests= await display.userInterests('website.db', ctx.params.uid)
+		await ctx.render('user', {user: userInfo, interest: interests} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

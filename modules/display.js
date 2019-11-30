@@ -76,5 +76,33 @@ module.exports = class Display {
 			throw err
 		}
 	}
+	async userInterests(dbName, id) 
+	{
+		try {
+			const db = await sqlite.open(dbName)
+			const sqlUser = `SELECT user FROM users WHERE id = "${id}";`
+			const user = await db.get(sqlUser)
+			console.log('user: ', user)
+			const sql = `SELECT itemid, interest FROM interest WHERE user = "${user.user}";`
+			const interests = await db.all(sql)
+			console.log('interests: ', interests)
+			await db.close()
+			return interests
+		} catch(err) {
+			throw err
+		}
+	}
+
+	async userToUserId(dbName, user) {
+		try {
+			const db = await sqlite.open(dbName)
+			const sqlUser = `SELECT id FROM users WHERE user = "${user}";`
+			const userInfo = await db.get(sqlUser)
+			await db.close()
+			return userInfo
+		} catch(err) {
+			throw err
+		}
+	}
 }
 

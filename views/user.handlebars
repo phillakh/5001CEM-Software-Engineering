@@ -23,7 +23,18 @@
             
 
             <h3>Username: {{user.user}}</h3>
+            <img src="../avatars/{{user.user}}.jpeg" alt="Picture of the user" width = "200" height = "200"/></a>
             <h3>Email: {{user.email}}</h3>
 
         </section>
+        <h3>{{user.user}} is interested in:</h3>
+         {{#each interest}}
+                <section class = "row">
+                    <figure>
+                        <a href="../details/{{this.itemid}}">
+                        <img src="../itemImages/{{this.itemid}}/0.jpeg" alt="Picture of an artpiece for sale" width = "200" height = "200"/></a>
+                        <figcaption>interest: {{this.interest}} </figcaption>
+                    </figure>
+                </section>
+        {{/each}}
     </body>

@@ -20,7 +20,7 @@ module.exports = class User {
 			const sqlItemsTable = 'CREATE TABLE IF NOT EXISTS items '
 			const sqlItems = `${sqlItemsTable} ${ sqlItemsTable1}${ sqlItemsTable2}`
 			await this.db.run(sqlItems)
-			const sqlInterest2 = '(user TEXT, itemid INTEGER, interest TEXT, PRIMARY KEY(user, itemid)'
+			const sqlInterest2 = '(user TEXT, itemid INTEGER, interest INTEGER, PRIMARY KEY(user, itemid));'
 			const sqlInterest1 = 'CREATE TABLE IF NOT EXISTS interest '
 			const sqlInterest = `${ sqlInterest1}${ sqlInterest2}`
 			await this.db.run(sqlInterest)
@@ -36,7 +36,7 @@ module.exports = class User {
 			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
 			pass = await bcrypt.hash(pass, saltRounds)
 			sql = `INSERT INTO users(user, pass, email, phone, paypal) VALUES("${user}", "${pass}", "${email}", 
-			"${phone}", "${paypal}")`
+			"${phone}", "${paypal}");`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
@@ -95,7 +95,7 @@ module.exports = class User {
 			await this.uploadItemPictures(imageArray, id)
 			const sql = 'INSERT INTO items(title, shortDesc, longDesc, price, owner) '
 			const sql2 = `VALUES("${itemInfo.title}", "${itemInfo.shortDesc}", `
-			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}")`
+			const sql3 = `"${itemInfo.longDesc}", "${itemInfo.price}", "${itemInfo.owner}");`
 			await this.db.run(sql + sql2 + sql3)
 			return id
 		} catch(err) {
@@ -107,11 +107,11 @@ module.exports = class User {
 			const sql = `SELECT user, email, phone FROM users WHERE user ="${user}";`
 			if (typeof dbName === 'object') {
 				const data = await this.db.get(sql)
-				//await this.db.close()
+				await this.db.close()
 				return data
 			}else{
 				const data = await this.db.get(sql)
-				//await this.db.close()
+				await this.db.close()
 				return data
 			}
 		} catch(err) {
@@ -120,13 +120,11 @@ module.exports = class User {
 	}
 	async setInterest(user, itemid, interest) {
 		try {
-			if(user.length === 0) throw new Error('missing username')
-			if(pass.length === 0) throw new Error('missing password')
 			let sql = `SELECT COUNT(user) as records FROM interest WHERE user="${user}" AND itemid="${itemid}";`
 			const data = await this.db.get(sql)
 			sql = `INSERT INTO interest(user, itemid, interest) VALUES("${user}", "${itemid}", "${interest}");` 
-			if(data.records !== 0) sql = `UPDATE interest SET interest = '${interest}' WHERE user="${user}"
-			 AND itemid="${itemid}";`
+			if(data.records !== 0) {sql = `UPDATE interest SET interest = '${interest}' WHERE user="${user}"
+			 AND itemid="${itemid}";`}
 			await this.db.run(sql)
 		} catch(err) {
 			throw err
