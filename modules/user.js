@@ -120,9 +120,11 @@ module.exports = class User {
 		try {
 			let sql = `SELECT COUNT(user) as records FROM interest WHERE user="${user}" AND itemid="${itemid}";`
 			const data = await this.db.get(sql)
-			sql = `INSERT INTO interest(user, itemid, interest) VALUES("${user}", "${itemid}", "${interest}");` 
-			if(data.records !== 0) {sql = `UPDATE interest SET interest = '${interest}' WHERE user="${user}"
-			 AND itemid="${itemid}";`}
+			sql = `INSERT INTO interest(user, itemid, interest) VALUES("${user}", "${itemid}", "${interest}");`
+			if(data.records !== 0) {
+				sql = `UPDATE interest SET interest = '${interest}' WHERE user="${user}"
+			 AND itemid="${itemid}";`
+			}
 			await this.db.run(sql)
 		} catch(err) {
 			throw err

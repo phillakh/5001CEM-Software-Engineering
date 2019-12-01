@@ -35,8 +35,8 @@ const router = new Router()
 
 router.get('/homepage', async ctx => {
 	try {
-		const display = await new Display()
-		const data = await display.list('website.db')
+		const display = await new Display('website.db')
+		const data = await display.list()
 		await ctx.render('homepage', {item: data} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -52,9 +52,9 @@ router.get('/homepage', async ctx => {
 
 router.get('/details/:id', async ctx => {
 	try {
-		const display = await new Display()
-		const data = await display.details('website.db', ctx.params.id)
-		data.userid = await display.userToUserId('website.db', data.owner)
+		const display = await new Display('website.db')
+		const data = await display.details(ctx.params.id)
+		data.userid = await display.userToUserId(data.owner)
 		ctx.session.item = ctx.params.id
 		await ctx.render('details', data )
 
@@ -62,12 +62,11 @@ router.get('/details/:id', async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
 router.post('/details', koaBody, async ctx => {
 	try {
 		const user = await new User('website.db')
 		await user.setInterest(ctx.session.username, ctx.session.item, ctx.request.body.interest)
-		
+
 		await ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -83,9 +82,9 @@ router.post('/details', koaBody, async ctx => {
 
 router.get('/user-homepage/:uid', async ctx => {
 	try {
-		const display= await new Display()
-		const userInfo= await display.userDetails('website.db', ctx.params.uid)
-		const interests= await display.userInterests('website.db', ctx.params.uid)
+		const display= await new Display('website.db')
+		const userInfo= await display.userDetails(ctx.params.uid)
+		const interests= await display.userInterests(ctx.params.uid)
 		await ctx.render('user', {user: userInfo, interest: interests} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -101,8 +100,8 @@ router.get('/user-homepage/:uid', async ctx => {
 
 router.get('/paypal', async ctx => {
 	try {
-		const display = await new Display()
-		const data = await display.list('website.db')
+		const display = await new Display('website.db')
+		const data = await display.list()
 		await ctx.render('paypal', {item: data} )
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -139,8 +138,8 @@ router.get('/search', async ctx => {
 router.post('/search', koaBody, async ctx => {
 	try {
 		const query = ctx.request.body.query
-		const display = await new Display()
-		const results = await display.search('website.db', query)
+		const display = await new Display('website.db')
+		const results = await display.search(query)
 		await ctx.render('search', {item: results})
 	} catch(err) {
 		await ctx.render('error', {message: err.message})

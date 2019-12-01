@@ -12,7 +12,7 @@ const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
 const router = require('./routes')
-let currentUser = null
+const currentUser = null
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
 const seller = require('./modules/seller.js')
@@ -38,7 +38,7 @@ router.get('/', async ctx => {
 		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
 		const data = {}
 		if(ctx.query.msg) data.msg = ctx.query.msg
-		await ctx.render('index')
+		await ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -58,27 +58,22 @@ router.get('/register', async ctx => await ctx.render('register'))
  */
 router.post('/register', koaBody, async ctx => {
 	try {
-		// extract the data from the request
 		const body = ctx.request.body
-		// call the functions in the module
 		const user = await new User(dbName)
 		await user.register(body.user, body.pass, body.email, body.phone, body.paypal)
 		const avatar = ctx.request.files.avatar
 		await user.uploadPicture(avatar.path, `image/${avatar.type}`, body.user)
-		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
 /**
  * The user login page.
  *
  * @name Login Page
  * @route {GET} /login
  */
-
 router.get('/login', async ctx => {
 	const data = {}
 	if(ctx.query.msg) data.msg = ctx.query.msg
@@ -91,7 +86,6 @@ router.get('/login', async ctx => {
  * @name Login Script
  * @route {POST} /login
  */
-
 router.post('/login', async ctx => {
 	try {
 		const body = ctx.request.body
@@ -104,16 +98,13 @@ router.post('/login', async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
 /**
  * The item upload page.
  *
  * @name Upload Page
  * @route {GET} /upload
  */
-
 router.get('/upload', async ctx => await ctx.render('upload'))
-
 /**
  * The script to process new item uploads.
  *
@@ -125,7 +116,6 @@ router.post('/upload', koaBody, async ctx => {
 		const body = ctx.request.body
 		body.owner = ctx.session.username
 		const user = await new User(dbName)
-		console.log(ctx.request.files['itemImages[]'])
 		const id = await user.uploadItem(ctx.request.files['itemImages[]'], body)
 		await ctx.redirect(`/details/${id}`)
 	} catch(err) {
@@ -139,11 +129,9 @@ router.get('/confirmation', async ctx => {
 		const body = ctx.request.body
 		ctx.session.username = body.user
 		const data = await accounts.getUser(currentUser)
-		console.log(data)
 		await ctx.render('confirmation',{user: data})
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
-		console.log(err)
 	}
 })
 
