@@ -23,17 +23,19 @@
 				<p>Seller: {{owner}}</p>
 			</section> </a>
 			<section class='sellerDetails'>
-					<p>{{title}}</p>
-					<p>{{price}}</p>
+					<p>Title: {{title}}</p>
+					<p>Price: £{{price}}</p>
 			</section>		
 			<footer class='sellerDetailsFooter'>CONTACT SELLER BUTTON</footer>
 		</section>
 
 		<aside class='imageSide'>
 			<img id="artwork" class='artPicture' src="../itemImages/{{id}}/0.jpeg" alt="Picture of the Art Piece"/>
-				<img class="thumbnails" src="../itemImages/{{id}}/0.jpeg" alt="Picture of the Art Piece"/>
-				<img class="thumbnails" src="../itemImages/{{id}}/1.jpeg" alt="Picture of the Art Piece"/>
-				<img class="thumbnails" src="../itemImages/{{id}}/2.jpeg" alt="Picture of the Art Piece"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/0.jpeg" alt="Art"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/1.jpeg" alt="Art"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/2.jpeg" alt="Art"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/3.jpeg" alt="Art"/>
+				<img class="thumbnails" src="../itemImages/{{id}}/4.jpeg" alt="Art"/>	
 			<button onclick="pictureChange('prev')"><</button>
 			<button onclick="pictureChange('next')">></button>
 			<footer class="imageSideFooter">{{longDesc}}</footer>
@@ -53,8 +55,13 @@
 	<script>
 		//Picture change button	
 		var currentImage = 0
-		// set array length based on number of images added
-		images = ["../itemImages/{{id}}/0.jpeg", "../itemImages/{{id}}/1.jpeg", "../itemImages/{{id}}/2.jpeg"];
+		var images = [];
+
+		for(var i = 0; i < 5; i++)
+		{
+			var item = "../itemImages/{{id}}/".concat(i, ".jpeg")
+			images.push(item)
+		}
 	function pictureChange(param)
 	{
 		if(param === 'next')
