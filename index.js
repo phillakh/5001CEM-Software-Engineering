@@ -12,7 +12,6 @@ const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
 const router = require('./routes')
-const currentUser = null
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
 const seller = require('./modules/seller.js')
@@ -122,19 +121,12 @@ router.post('/upload', koaBody, async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
-router.get('/confirmation', async ctx => {
-	try {
-		const accounts = await new User('website.db')
-		const body = ctx.request.body
-		ctx.session.username = body.user
-		const data = await accounts.getUser(currentUser)
-		await ctx.render('confirmation',{user: data})
-	} catch(err) {
-		await ctx.render('error', {message: err.message})
-	}
-})
-
+/**
+ * The script to process confirmation of payment transaction.
+ *
+ * @name Confirmation script
+ * @route {POST} / confirmation
+ */
 router.post('/confirmation', async ctx => {
 	try {
 		seller.sendEmail()
