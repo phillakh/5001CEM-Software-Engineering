@@ -1,5 +1,7 @@
 'use strict'
 
+module.exports.sendEmail = sendEmail
+
 const nodemailer = require('nodemailer')
 
 const transported = nodemailer.createTransport({
@@ -14,7 +16,7 @@ const mailOptions = {
 	from: 'thegallery2K19@gmail.com',
 	to: 'jordantajheria@gmail.com',
 	subject: 'Sending Email using Node.js',
-	html: '<p>{{username}} and your password is {{password}}</p>'
+	html: 'This is an email containing information of the sellers details'
 }
 
 const sendEmail = () => {
@@ -26,5 +28,3 @@ const sendEmail = () => {
 		}
 	})
 }
-
-module.exports.sendEmail = sendEmail
