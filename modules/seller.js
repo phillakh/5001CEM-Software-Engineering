@@ -1,7 +1,5 @@
 'use strict'
 
-module.exports.sendEmail = sendEmail
-
 const nodemailer = require('nodemailer')
 
 const transported = nodemailer.createTransport({
@@ -28,3 +26,6 @@ const sendEmail = () => {
 		}
 	})
 }
+
+module.exports.sendEmail = sendEmail
+
