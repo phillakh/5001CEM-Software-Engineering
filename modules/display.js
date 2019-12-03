@@ -54,9 +54,9 @@ module.exports = class Display {
 			throw err
 		}
 	}
-	async userDetails(id) {
+	async userDetails(user) {
 		try {
-			const sql = `SELECT id, user, email, phone FROM users WHERE id = "${id}";`
+			const sql = `SELECT id, user, email, phone FROM users WHERE user = "${user}";`
 			const data = await this.db.get(sql)
 			return data
 		} catch(err) {
@@ -65,8 +65,10 @@ module.exports = class Display {
 	}
 	async userInterests(id) {
 		try {
-			const sqlUser = `SELECT user FROM users WHERE id = "${id}";`
+
+			const sqlUser = `SELECT user FROM users WHERE id = "${id.id}";`
 			const user = await this.db.get(sqlUser)
+			console.log(user)
 			const sql = `SELECT itemid, interest FROM interest WHERE user = "${user.user}";`
 			const interests = await this.db.all(sql)
 			return interests

@@ -111,25 +111,27 @@ router.post('/emailConfirmation', async ctx => {
  * @name user-homepage Page
  * @route {GET} /user-homepage/:uid
  */
-
-router.get('/user-homepage/:uid', async ctx => {
-	try {
-		const display= await new Display('website.db')
-		const userInfo= await display.userDetails(ctx.params.uid)
-		const interests= await display.userInterests(ctx.params.uid)
-		await ctx.render('user', {user: userInfo, interest: interests} )
+router.get('/user-homepage', async ctx => {
+	try{
+		if (ctx.session.authorised !== true) {
+			ctx.redirect('/homepage')
+		} else {
+			const display = await new Display('website.db')
+			const data = await display.userDetails(ctx.session.username)
+			const userid = await display.userToUserId(ctx.session.username)
+			const interests= await display.userInterests(userid)
+			await ctx.render('user', {user: data, interest: interests} )
+		}
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
 /**
  * Fake Paypal page.
  *
  * @name paypal Page
  * @route {GET} /paypal
  */
-
 router.get('/paypal', async ctx => {
 	try {
 		const display = await new Display('website.db')
@@ -139,34 +141,28 @@ router.get('/paypal', async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
-
 router.get('/logout', async ctx => {
 	ctx.session.authorised = null
 	delete ctx.session.username
 	ctx.redirect('/?msg=you are now logged out')
 })
-
 /**
  * The search page to search globally for items.
  *
  * @name search Page
  * @route {GET} /search
  */
-
 router.get('/search', async ctx => {
 	const results = {}
 	await ctx.render('search', {item: results})
 
 })
-
 /**
  * The search page to search globally for items.
  *
  * @name search Page
  * @route {POST} /search
  */
-
 router.post('/search', koaBody, async ctx => {
 	try {
 		const query = ctx.request.body.query
@@ -177,5 +173,4 @@ router.post('/search', koaBody, async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
-
 module.exports = router

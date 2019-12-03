@@ -12,7 +12,6 @@ const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
 const router = require('./routes')
-
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
 const seller = require('./modules/seller.js')
