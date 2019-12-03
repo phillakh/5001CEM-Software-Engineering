@@ -51,6 +51,18 @@
 				<input type="submit" value="Submit">
 			</form>
 		</section>
+		{{#if detailsmsg}}
+		<p>{{detailsmsg.msg}}</p>
+		{{/if}}
+		<footer class='sellerDetailsFooter'>
+				<form action="/emailConfirmation" method="post" style="width:20rem">
+  					 	<label>Your email</label>
+  						<input type="email" name="email" value="{{userdata.email}}"/>
+  					 	<label>Message</label>
+  					  	<input type="text" name="message" />
+   						<input type="submit" name="submit" value="Contact seller" />
+				</form>
+		</footer>
 	</body>
 	<script>
 		//Picture change button	

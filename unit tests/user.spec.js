@@ -118,7 +118,7 @@ describe('login()', () => {
 			await account.register('doej', 'password', 'email@email.com', '123456789', 'paypal')
 			await expect( await account.login('doej', 'bad') )
 		} catch(err) {
-			expect(err.message).toBe('doej', 'bad')
+			expect(err.message).toBe('invalid password for account \"doej\"')
 		} finally{
 			done()
 		}

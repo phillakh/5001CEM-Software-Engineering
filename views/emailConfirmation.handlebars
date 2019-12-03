@@ -1,0 +1,23 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<title>{{title}}</title>
+		<link href="../details.css" type="text/css" rel="stylesheet" />
+		<link href="../popupForm.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+		
+		<h2>
+			<nav class = "nav"> 
+				<a href="/homepage">Home</a>
+				<a href="#about">About Us</a>
+				<a href="/upload">Upload Art</a>
+				<a href="/search">Search</a>
+        	</nav> 
+		</h2>
+		{{#if detailsmsg}}
+		<h2>{{detailsmsg.msg}}</h2>
+		{{/if}}
+		
+</html>

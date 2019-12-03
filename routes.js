@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+/* eslint-disable max-lines-per-function */
+
+//#!/usr/bin/env node
 
 //Routes File
 
@@ -12,6 +14,7 @@ const staticDir = require('koa-static')
 const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
+const nodemailer = require('nodemailer')
 
 /* IMPORT CUSTOM MODULES */
 const Display = require('./modules/display.js')
@@ -62,6 +65,7 @@ router.get('/details/:id', async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 })
+
 router.post('/details', koaBody, async ctx => {
 	try {
 		const user = await new User('website.db')
@@ -70,6 +74,34 @@ router.post('/details', koaBody, async ctx => {
 		await ctx.redirect('/homepage')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
+	}
+})
+
+router.post('/emailConfirmation', async ctx => {
+	try {
+		const body = ctx.request.body
+		const smtpConfig = {
+			host: 'smtp.gmail.com',
+			port: 465,
+			secure: true, // use SSL
+			auth: {
+				user: 'lewtestmailcs@gmail.com',
+				pass: 'ilolpop123'
+			}
+		}
+		const transporter = nodemailer.createTransport(smtpConfig)
+		// setup e-mail data with unicode symbols
+		const mailOptions = {
+			from: 'Lewis Test Mail <lewistestmailcs@gmail.com>', // sender address
+			to: 'lewtestmailcs@gmail.com', // list of receivers
+			subject: 'Contact seller', // Subject line
+			text: `Email from a customer. email:${body.email}, message: ${body.message}`, // plaintext body
+			html: `<p>Email from a customer</p><p>Email: ${body.email}</p><p>Email: ${body.message}</p>` // html body
+		}
+		await transporter.sendMail(mailOptions)
+		await ctx.render('emailConfirmation', {detailsmsg: {msg:'Email has been sent!'}})
+	} catch(err) {
+		await ctx.render('error', {detailsmsg: err})
 	}
 })
 
