@@ -24,10 +24,16 @@ module.exports = class Display {
 		})()
 	}
 
+
+	
 	async list() {
 		try {
 			const sql = 'SELECT id, title, price FROM items ORDER BY id DESC LIMIT 9;'
 			const data = await this.db.all(sql)
+			for (const element of data) {
+				 element.interest =  await this.itemInteresteds(element.id)
+			};
+
 			return data
 		} catch(err) {
 			throw err
@@ -68,7 +74,6 @@ module.exports = class Display {
 
 			const sqlUser = `SELECT user FROM users WHERE id = "${id.id}";`
 			const user = await this.db.get(sqlUser)
-			console.log(user)
 			const sql = `SELECT itemid, interest FROM interest WHERE user = "${user.user}";`
 			const interests = await this.db.all(sql)
 			return interests
@@ -92,6 +97,16 @@ module.exports = class Display {
 			const sql = `SELECT id, title, price FROM items WHERE owner = "${user}";`
 			const data = await this.db.all(sql)
 			return data
+		} catch(err) {
+			throw err
+		}
+	}
+
+	async itemInteresteds(id) {
+		try {
+			const sql = `SELECT interest, user FROM interest WHERE itemid = "${id}";`
+			const interests = await this.db.all(sql)
+			return interests
 		} catch(err) {
 			throw err
 		}

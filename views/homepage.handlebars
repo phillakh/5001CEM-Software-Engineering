@@ -24,7 +24,12 @@
                     <figure>
                         <a href="../details/{{id}}">
                         <img src="itemImages/{{this.id}}/0.jpeg" alt="Picture of an artpiece for sale" width = "200" height = "200"/></a>
-                        <figcaption> {{this.title}}, {{this.price}} £</figcaption>
+                        <figcaption> {{this.title}}, {{this.price}} £</figcaption> 
+                        {{#each this.interest}}
+                            <p>{{this.user}} has level {{this.interest}} interest</p>
+                            
+                            
+                        {{/each}}
                     </figure>
                 </section>
                 {{/each}}
