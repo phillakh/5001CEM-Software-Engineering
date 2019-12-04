@@ -111,5 +111,20 @@ module.exports = class Display {
 			throw err
 		}
 	}
+
+	async emailDetails(id, sender) {
+		try {
+			const sql = `SELECT id, title, price, owner FROM items WHERE id = "${id}";`
+			const data = await this.db.get(sql)
+			const sqlEmail = `SELECT email FROM users WHERE user = "${data.owner}";`
+			data.email = await this.db.get(sqlEmail)
+			const sqlSender = `SELECT email, phone, user FROM users WHERE user = "${sender}";`
+			data.sender = await this.db.get(sqlSender)
+			console.log(data.email)
+			return data
+		} catch(err) {
+			throw err
+		}
+	}
 }
 
