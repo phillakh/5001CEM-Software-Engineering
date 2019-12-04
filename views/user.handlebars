@@ -27,14 +27,28 @@
             <h3>Email: {{user.email}}</h3>
 
         </section>
-        <h3>{{user.user}} is interested in:</h3>
+
+        <h3>Your items:</h3>
+        {{#each owned}}
+                <section class = "row">
+                    <figure>
+                        <a href="../details/{{this.id}}">
+                        <img src="../itemImages/{{this.id}}/0.jpeg" alt="Picture of an artpiece for sale" width = "200" height = "200"/></a>
+                        <figcaption>Title: {{this.title}} price: {{this.price}}  </figcaption>
+                    </figure>
+                </section>
+        {{/each}}
+        <aside class='imageSide'>
+        <h3>Your interests:</h3>
          {{#each interest}}
                 <section class = "row">
                     <figure>
                         <a href="../details/{{this.itemid}}">
                         <img src="../itemImages/{{this.itemid}}/0.jpeg" alt="Picture of an artpiece for sale" width = "200" height = "200"/></a>
-                        <figcaption>interest: {{this.interest}} </figcaption>
+                        <figcaption>interest: {{this.interest}}</figcaption>
                     </figure>
                 </section>
         {{/each}}
+        </aside>
+        
     </body>

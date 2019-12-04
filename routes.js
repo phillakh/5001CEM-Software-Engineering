@@ -87,8 +87,9 @@ router.get('/user-homepage', async ctx => {
 			const display = await new Display('website.db')
 			const data = await display.userDetails(ctx.session.username)
 			const userid = await display.userToUserId(ctx.session.username)
-			const interests= await display.userInterests(userid)
-			await ctx.render('user', {user: data, interest: interests} )
+			const interests = await display.userInterests(userid)
+			const owned = await display.listOwned(ctx.session.username)
+			await ctx.render('user', {user: data, interest: interests, owned: owned} )
 		}
 	} catch(err) {
 		await ctx.render('error', {message: err.message})

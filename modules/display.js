@@ -86,5 +86,15 @@ module.exports = class Display {
 			throw err
 		}
 	}
+
+	async listOwned(user) {
+		try {
+			const sql = `SELECT id, title, price FROM items WHERE owner = "${user}";`
+			const data = await this.db.all(sql)
+			return data
+		} catch(err) {
+			throw err
+		}
+	}
 }
 
