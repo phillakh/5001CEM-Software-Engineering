@@ -25,13 +25,12 @@ module.exports = class Display {
 	}
 
 
-	
 	async list() {
 		try {
 			const sql = 'SELECT id, title, price FROM items ORDER BY id DESC LIMIT 9;'
 			const data = await this.db.all(sql)
 			for (const element of data) {
-				 element.interest =  await this.itemInteresteds(element.id)
+				 element.interest = await this.itemInteresteds(element.id)
 			};
 
 			return data

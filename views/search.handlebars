@@ -17,10 +17,6 @@
         <form action="/search" enctype="multipart/form-data" method="post">
 				<input id= 'search' width='200px' type="text" name="query" placeholder="Search ...">
 		</form> 
-        
-        {{#if item}}
-        <h3>Search results:</h3>
-        
         {{#each item}}
         <section class = "row">
                     <figure>
@@ -30,6 +26,5 @@
                     </figure> 
         </section>
          {{/each}}
-        {{/if}}
     </body>
 </html>

@@ -27,11 +27,11 @@ app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handleb
 
 router.post('/emailConfirmation', async ctx => {
 	try {
-        const display = await new Display(`website.db`)
-        console.log('yo')
-        const body = ctx.request.body
-        const emailInfo = await display.emailDetails(ctx.session.item, ctx.session.username)
-        console.log('passou o method')
+		const display = await new Display('website.db')
+		console.log('yo')
+		const body = ctx.request.body
+		const emailInfo = await display.emailDetails(ctx.session.item, ctx.session.username)
+		console.log('passou o method')
 		const smtpConfig = {
 			host: 'smtp.gmail.com',
 			port: 465,
@@ -42,19 +42,21 @@ router.post('/emailConfirmation', async ctx => {
 			}
 		}
 		const transporter = nodemailer.createTransport(smtpConfig)
-        console.log(emailInfo)
+		console.log(emailInfo)
 		const mailOptions = {
-			from: 'Lewis Test Mail <lewistestmailcs@gmail.com>', 
-            to: emailInfo.email.email, 
-            
-			subject: 'Someone is interested in your item', 
-            
-            text: `${ctx.session.username} is interested in your item "${emailInfo.title}", priced at ${emailInfo.price}. 
+			from: 'Lewis Test Mail <lewistestmailcs@gmail.com>',
+			to: emailInfo.email.email,
+
+			subject: 'Someone is interested in your item',
+
+			text: `${ctx.session.username} is interested in your item "${emailInfo.title}",
+            priced at ${emailInfo.price}. 
             ${ctx.session.username} contact information: 
             Email: ${emailInfo.sender.email}, Phone: ${emailInfo.sender.phone}
-             message: ${body.message}`, 
-            
-            html: `<p>${ctx.session.username} is interested in your item "${emailInfo.title}", priced at ${emailInfo.price}.</p>
+             message: ${body.message}`,
+
+			html: `<p>${ctx.session.username} is interested in your item "${emailInfo.title}", 
+            priced at ${emailInfo.price}.</p>
             <p>${ctx.session.username} contact information:</p> <p>Email: ${emailInfo.sender.email}</p>
             <p>Phone: ${emailInfo.sender.phone}</p>
             <p> message: ${body.message}</p>`

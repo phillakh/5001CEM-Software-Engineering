@@ -1,3 +1,6 @@
+html{
+    font-size: 120%;
+}
 body{
     background-image: URL('/images/background.jpg');
     background-size: cover;
