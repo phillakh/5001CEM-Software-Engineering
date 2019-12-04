@@ -36,7 +36,7 @@ module.exports = class Display {
 
 	async details(id) {
 		try {
-			const sql = `SELECT id, title, price, owner, longDesc FROM items WHERE id = "${id}";`
+			const sql = `SELECT id, title, price, owner, longDesc, shortDesc FROM items WHERE id = "${id}";`
 			const data = await this.db.get(sql)
 			return data
 		} catch(err) {
