@@ -6,7 +6,16 @@ body {
     background-size: cover;
     font-family: Helvetica, sans-serif;
     margin-left: 4em;
-    margin-top: 4em;
+    text-align: center;
+  }
+  
+  body
+  {
+   font-size: 2em;
+   color:black
+   text-align: center;
+   font-size: 1em;
+   
   }
   header
   {
